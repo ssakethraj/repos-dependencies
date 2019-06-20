@@ -2,7 +2,7 @@ import React from "react";
 import InputSearch from "../../Components/github/InputSearch";
 import GithubResult from "../../Components/github/GithubResult";
 import { connect } from "react-redux";
-import { fetchRepos } from "../../redux/github/actions";
+import { fetchRepos, fetchRepoContent } from "../../redux/github/actions";
 import Spinner from "../../Components/spinner";
 
 class Github extends React.Component {
@@ -24,7 +24,7 @@ class Github extends React.Component {
     this.props.fetchRepositories();
   }
   render() {
-    const { repos, isLoading } = this.props;
+    const { repos, isLoading, isError } = this.props;
     return (
       <React.Fragment>
         <InputSearch
@@ -32,11 +32,15 @@ class Github extends React.Component {
           handleSubmit={this.handleSubmit}
           value={this.state.input}
         />
-        {isLoading ? (
+        {isError ? (
+          <h3>Oops..! Something wrong. Please come back again</h3>
+        ) : isLoading ? (
           <Spinner style={{ display: "inline-block", margin: "100px" }} />
         ) : (
-          // "Loading..."
-          <GithubResult repos={repos} />
+          <GithubResult
+            repos={repos}
+            fetchRepoContent={this.props.fetchRepoContent}
+          />
         )}
       </React.Fragment>
     );
@@ -46,12 +50,15 @@ const mapStateToProps = state => {
   console.log("State: ", state);
   return {
     repos: state.github.repos,
-    isLoading: state.github.loading
+    isLoading: state.github.loading,
+    isError: state.github.error === null
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    fetchRepositories: () => dispatch(fetchRepos())
+    fetchRepositories: () => dispatch(fetchRepos()),
+    fetchRepoContent: (username, reponame) =>
+      dispatch(fetchRepoContent(username, reponame))
   };
 };
 export default connect(
