@@ -1,6 +1,6 @@
 import React from "react";
-import InputSearch from "../../Components/github/InputSearch";
-import GithubResult from "../../Components/github/GithubResult";
+import InputSearch from "../../Components/repos/InputSearch";
+import GithubResult from "../../Components/repos/GithubResult";
 import { connect } from "react-redux";
 import { fetchRepos, fetchRepoContent } from "../../redux/github/actions";
 import Spinner from "../../Components/spinner";
@@ -31,17 +31,22 @@ class Github extends React.Component {
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           value={this.state.input}
-        />
+        />{" "}
         {isError ? (
-          <h3>Oops..! Something wrong. Please come back again</h3>
+          <h3> Oops..!Something wrong.Please come back again </h3>
         ) : isLoading ? (
-          <Spinner style={{ display: "inline-block", margin: "100px" }} />
+          <Spinner
+            style={{
+              display: "inline-block",
+              margin: "100px"
+            }}
+          />
         ) : (
           <GithubResult
             repos={repos}
             fetchRepoContent={this.props.fetchRepoContent}
           />
-        )}
+        )}{" "}
       </React.Fragment>
     );
   }
