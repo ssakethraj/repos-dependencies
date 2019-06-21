@@ -1,76 +1,69 @@
 export const actions = {
-  FETCH_REPOS_REQUEST: "FETCH_REPOS_REQUEST",
-  FETCH_REPOS_SUCCESS: "FETCH_REPOS_SUCCESS",
-  FETCH_REPOS_ERROR: "FETCH_REPOS_ERROR",
-  FETCH_CONTENT_REQUEST: "FETCH_CONTENT_REQUEST",
-  FETCH_CONTENT_SUCCESS: "FETCH_CONTENT_SUCCESS",
-  FETCH_CONTENT_ERROR: "FETCH_CONTENT_ERROR"
+  FETCH_REPOS: "FETCH_REPOS",
+  FETCH_CONTENT: "FETCH_CONTENT",
+  FETCH_REPO: "FETCH_REPO",
 };
 
-// action creators for fetch repos
-const fetchRepoStarted = () => {
+// action creators
+const fetchStarted = (type) => {
   return {
-    type: actions.FETCH_REPOS_REQUEST
+    type: type + "_REQUEST"
   };
 };
-const fetchRepoSuccess = payload => {
+const fetchSuccess = (type, payload) => {
   return {
-    type: actions.FETCH_REPOS_SUCCESS,
+    type: type + "_SUCCESS",
     payload
   };
 };
-const fetchRepoFailure = err => {
+const fetchRFailure = (type, err) => {
   return {
-    type: actions.FETCH_REPOS_ERROR,
-    error: err
-  };
-};
-
-//action creators for fetch content
-const fetchContentStarted = () => {
-  return {
-    type: actions.FETCH_CONTENT_REQUEST
-  };
-};
-const fetchContentSuccess = payload => {
-  return {
-    type: actions.FETCH_CONTENT_SUCCESS,
-    payload
-  };
-};
-const fetchContentFailure = err => {
-  return {
-    type: actions.FETCH_CONTENT_ERROR,
+    type: type + "_ERROR",
     error: err
   };
 };
 
 // FETCH REPOSITORY
 export const fetchRepos = () => dispatch => {
-  dispatch(fetchRepoStarted());
+  dispatch(fetchStarted(actions.FETCH_REPOS));
   fetch("https://api.github.com/repositories")
     .then(res => res.json())
     .then(data => {
       console.log("Repos: ", data);
-      dispatch(fetchRepoSuccess(data));
+      dispatch(fetchSuccess(actions.FETCH_REPOS, data));
     })
     .catch(err => {
       console.log("Error", err)
-      dispatch(fetchRepoFailure(err));
+      dispatch(fetchSuccess(actions.FETCH_REPOS, err));
     });
 };
 
 //FETCH CONTENT
 export const fetchRepoContent = (username, reponame) => dispatch => {
   console.log("triggered")
-  dispatch(fetchContentStarted());
+  dispatch(fetchStarted(actions.FETCH_CONTENT));
   fetch(`https://api.github.com/repos/${username}/${reponame}/contents/package.json`)
     .then(res => res.json())
     .then(data => {
       console.log("Content: ", data);
-      dispatch(fetchContentSuccess(data));
+      dispatch(fetchSuccess(actions.FETCH_CONTENT, data));
     })
     .catch(err => {
-      dispatch(fetchContentFailure(err));
+      dispatch(fetchSuccess(actions.FETCH_CONTENT, err));
     });
 }
+
+// FETCH CURRENT REPOSITORY
+export const fetchCurrentRepo = (owner, repo) => dispatch => {
+  dispatch(fetchStarted(actions.FETCH_REPO));
+  fetch(`https://api.github.com/repos/${owner}/${repo}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("Repos: ", data);
+      dispatch(fetchSuccess(actions.FETCH_REPO, data));
+    })
+    .catch(err => {
+      console.log("Error", err)
+      dispatch(fetchSuccess(actions.FETCH_REPO, err));
+    });
+};
