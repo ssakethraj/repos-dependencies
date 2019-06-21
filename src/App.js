@@ -1,11 +1,12 @@
 import React from "react";
-import Github from "./Containers/Github";
 import "./App.css";
+import PublicRoutes from "./router";
 
 function App() {
   return (
     <div className="App">
-      <Github />
+      <h2>Melcow....!</h2>
+      <PublicRoutes />
     </div>
   );
 }

@@ -51,7 +51,7 @@ const mapStateToProps = state => {
   return {
     repos: state.github.repos,
     isLoading: state.github.loading,
-    isError: state.github.error === null
+    isError: !(state.github.error === null)
   };
 };
 const mapDispatchToProps = dispatch => {
