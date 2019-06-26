@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchRepoContent, fetchCurrentRepo } from "../../redux/github/actions";
+import { fetchContent, fetchRepo } from "../../redux/github/actions";
 import Spinner from "../../Components/spinner";
 
 class Content extends React.Component {
   componentWillMount() {
     const username = this.props.match.params.username;
     const reponame = this.props.match.params.reponame;
-    this.props.fetchRepoContent(username, reponame);
-    this.props.fetchCurrentRepo(username, reponame);
+    this.props.fetchContent(username, reponame);
+    this.props.fetchRepo(username, reponame);
   }
   render() {
     const { repo, content } = this.props;
@@ -45,16 +45,16 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRepoContent: (username, reponame) =>
-      dispatch(fetchRepoContent(username, reponame)),
-    fetchCurrentRepo: (username, reponame) =>
-      dispatch(fetchCurrentRepo(username, reponame))
-  };
-};
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   const username = ownProps.match.params.username;
+//   const reponame = ownProps.match.params.reponame;
+//   return {
+//     fetchRepoContent: () => dispatch(fetchRepoContent(username, reponame)),
+//     fetchCurrentRepo: () => dispatch(fetchCurrentRepo(username, reponame))
+//   };
+// };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { fetchRepo, fetchContent }
 )(Content);

@@ -21,7 +21,7 @@ class Github extends React.Component {
     });
   };
   componentDidMount() {
-    this.props.fetchRepositories();
+    this.props.fetchRepos();
   }
   render() {
     const { repos, isLoading, isError } = this.props;
@@ -44,7 +44,7 @@ class Github extends React.Component {
         ) : (
           <GithubResult
             repos={repos}
-            fetchRepoContent={this.props.fetchRepoContent}
+            // fetchRepoContent={this.props.fetchRepoContent}
           />
         )}{" "}
       </React.Fragment>
@@ -59,14 +59,8 @@ const mapStateToProps = state => {
     isError: !(state.github.error === null)
   };
 };
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRepositories: () => dispatch(fetchRepos()),
-    fetchRepoContent: (username, reponame) =>
-      dispatch(fetchRepoContent(username, reponame))
-  };
-};
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { fetchRepos }
 )(Github);

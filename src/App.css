@@ -23,12 +23,17 @@
   color: #61dafb;
 }
 
-ul {
+.list {
   list-style: none;
+  width: 60%;
+  margin: auto;
 }
 
-ul>li {
-  width: 60%;
+a {
+  text-decoration: none;
+}
+
+.link {
   margin: 15px auto;
   padding: 10px;
   background-color: #2f3542;
